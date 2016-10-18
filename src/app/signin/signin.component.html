@@ -1,0 +1,28 @@
+<div class="form-group">
+	<input type="text" #input (keyup)="0" class="form-control">
+	<p>{{input.value|double:'5':'445'}}</p>
+	<input type="text" class="form-control" #iteminput>
+	<button type="button" class="btn btn-primary" (click)="values.push(iteminput.value)">add item</button>
+</div>
+<ul class="list-group">
+	<li *ngFor='let item of values|filter:"ea" ' class="list-group-item list-group-item-info" (mouseenter)="active">{{item}}</li>
+</ul>
+<hr>
+<h2>asyn pipe</h2>
+<hr>
+<hr>
+<div class="form-group">
+	<input type="text" class="form-control" #a required>
+	<input type="text" class="form-control" #b required>
+	<button class='btn btn-primary' (click)="onAdd(a.value, b.value)">add item</button>
+</div>
+
+<p *ngIf="true">as promised {{asynvalue|async}}</p>
+
+<div clase="container">
+	<ul class="list-group">
+		<li *ngFor="let item of userlist.Object|async" class="list-group-item list-group-item-info">{{item.name}} : {{item.email}}</li>
+	</ul>
+</div>
+<hr>
+<hr>

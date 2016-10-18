@@ -1,0 +1,65 @@
+<div class="container">
+	<div class="row text-center">
+		<div class="col-md-4">
+			<div class="btn-group">
+				<div class="btn btn-primary" (click)="decrement()">
+					Previous
+				</div>
+				<div class="btn btn-default" (click)="today()">
+					Today
+				</div>
+				<div class="btn btn-primary" (click)="increment()">
+					Next
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+		</div>
+		<div class="col-md-4">
+			<div class="btn-group">
+				<div class="btn btn-primary" (click)="view = 'month'" [class.active]="view === 'month'">Month</div>
+				<div class="btn btn-primary" (click)="view = 'week'" [class.active]="view === 'week'">Week</div>
+				<div class="btn btn-primary" (click)="view = 'day'" [class.active]="view === 'day'">Day</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div [ngSwitch]="view">
+		<mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [activeDayIsOpen]="activeDayIsOpen"
+			(dayClicked)="dayClicked($event.day)">
+		</mwl-calendar-month-view>
+		<mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events">
+		</mwl-calendar-week-view>
+		<mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" (eventClicked)="OnEventClicked($event)">
+		</mwl-calendar-day-view>
+	</div>
+</div>
+<div id="myModal" [class]="modalClass">
+	<div class="modal-dialog input-group">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="OnCancel()">&times;</button>
+				<h4 class=" modal-title ">Edit Event</h4>
+			</div>
+			<div class="modal-body ">
+				<label for="title ">Title</label>
+				<input type="text " class="form-control " [ngModel]="selectEvent?.title " aria-describedby="basic-addon2 ">
+				<label for="title ">Start</label>
+
+
+				<input type="text " class="form-control " [ngModel]="selectEvent?.start " aria-describedby="basic-addon2 ">
+
+				<label for="title ">End</label>
+
+				<input type="text " class="form-control " [ngModel]="selectEvent?.end " aria-describedby="basic-addon2 ">
+				<p class="text-warning "><small>If you don't save, your changes will be lost.</small></p>
+			</div>
+			<div class="modal-footer ">
+				<button type="button " class="btn btn-default " data-dismiss="modal " (click)="OnCancel() ">Cancel Event</button>
+				<button type="button " class="btn btn-default " data-dismiss="modal " (click)="OnCancel() ">Close</button>
+				<button type="button " class="btn btn-primary " (click)="OnSave() ">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
