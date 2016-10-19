@@ -1,33 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
 import { Response } from '@angular/http';
-
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.css']
 })
 export class SigninComponent implements OnInit {
-  serverResp: {};
-  values: string[] = ['milk', 'bread', 'bean'];
-  userlist: Promise<[{ user: string, email: string }]>;
-  asynvalue: Promise<Response>;
-  constructor(private fservice: FirebaseService) {
-    this.fservice.getDate().subscribe(
-      (data: any) => {
-        console.log(data)
-        this.serverResp = data
-      }
-    );
-    this.asynvalue = this.fservice.getDatePromise().then((r: Response) => r.json());
+  user = {
+    username: "what is a name",
+    email: "name@mno.com",
+    password: "baddd",
+    gender: ""
+  };
+  genders = ['male', 'female'];
 
-    this.userlist = this.fservice.GetUserData();
-  }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
+  onSumbit(form: NgForm) {
+    // console.log(form.controls["username"].value);
+    //form.controls["name"].value
+    console.log(form.value);
+    console.log(this.user);
+  }
 
-  onAdd(name: string, email: string) {
-    this.fservice.sendData(name, email).then((r: Response) => console.log(r));
+  onRegister() {
+    this.router.navigate(['/register']);
   }
 }

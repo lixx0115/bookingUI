@@ -1,0 +1,27 @@
+<h1>Data Driven</h1>
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+	<div>
+		<div class="form-group">
+			<label for="username">Username</label>
+			<input formControlName="username" type="text" class="form-control" id="username">
+		</div>
+		<div class="form-group">
+			<label for="email">E-Mail</label>
+			<input formControlName="email" type="text" class="form-control" id="email">
+			<div *ngIf="!myForm?.controls?.email?.valid">
+				email must be xxx@xxx.xx formate
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="password">Password</label>
+		<input formControlName="password" type="password" class="form-control" id="password">
+	</div>
+	<div class="radio" *ngFor="let g of genders">
+		<label>
+       <input formControlName="gender" type="radio" name="gender"  [value]="g" >{{g}}
+    </label>
+	</div>
+	<button type="submit" class="btn btn-primary" [disabled]="!myForm.valid">Submit</button>
+</form>

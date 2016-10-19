@@ -1,27 +1,3 @@
-<form (ngSubmit)="onSumbit(f)" #f="ngForm">
-	<div ngModelGroup="userData">
-		<div class="form-group">
-			<label for="username">username</label>
-			<input type="text" class="form-control" id="username" [(ngModel)]="user.username" name="userName" required>
-		</div>
-		<div class="form-group">
-			<label for="email">email</label>
-			<input type="text" class="form-control" id="email" [(ngModel)]="user.email" name="email" required pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
-				#email="ngModel">
-			<div *ngIf="!email.valid">
-				you suck!
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="password">password</label>
-			<input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password" required>
-		</div>
-	</div>
-	<div class="radio" *ngFor="let g of genders">
-		<label>
-      <input  type="radio" name="gender" [(ngModel)]= "user.gender" [value]="g"  required>{{g}}
-    </label>
-	</div>
-	<button type="submit" class="btn btn-primary" [disabled]="!f.valid">Submit</button>
+<div class="container">
 
-</form>
+</div>

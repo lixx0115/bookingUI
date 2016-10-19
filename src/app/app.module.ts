@@ -18,7 +18,11 @@ import { DoublePipe } from './double.pipe';
 import { FilterPipe } from './filter.pipe';
 import { FirebaseService } from './firebase.service';
 import { CalendarModule, CalendarDateFormatter, CalendarEventTitle } from 'angular2-calendar/dist/esm/src';
- 
+import { BookingHomeComponent } from './booking/booking-home/booking-home.component';
+import { BookingNewEventComponent } from './booking/booking-new-event/booking-new-event.component';
+import { RegisterUserComponent } from './register-user/register-user.component';
+import { FacebookloginComponent } from './facebooklogin/facebooklogin.component';
+import { FacebookService } from './facebook.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +35,10 @@ import { CalendarModule, CalendarDateFormatter, CalendarEventTitle } from 'angul
     DataDrivenComponent,
     DoublePipe,
     FilterPipe,
+    BookingHomeComponent,
+    BookingNewEventComponent,
+    RegisterUserComponent,
+    FacebookloginComponent,
 
   ],
   imports: [
@@ -38,7 +46,7 @@ import { CalendarModule, CalendarDateFormatter, CalendarEventTitle } from 'angul
     FormsModule, ReactiveFormsModule, HttpModule,
     routing, CalendarModule
   ],
-  providers: [FirebaseService, CalendarDateFormatter, CalendarEventTitle],
+  providers: [FirebaseService, CalendarDateFormatter, CalendarEventTitle, FacebookService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
