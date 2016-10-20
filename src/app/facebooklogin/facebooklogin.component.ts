@@ -19,12 +19,12 @@ export class FacebookloginComponent implements OnInit {
     this.facebookService.facebookLogin().then(loggin => {
       console.log(loggin);
       if (loggin) {
-        this.router.navigate(["/booking"]);
-        console.log("booking");
+        this.router.navigate(["/"]);
+
       }
       else {
         this.router.navigate(['/signin']);
-        console.log("signin");
+
       }
     });
 

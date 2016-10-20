@@ -1,5 +1,6 @@
 import { Injectable, OnInit, EventEmitter } from '@angular/core';
 import { facebookUser } from './facebookUser';
+import { environment } from '../environments/environment'
 declare const FB: any;
 @Injectable()
 export class FacebookService implements OnInit {
@@ -8,7 +9,7 @@ export class FacebookService implements OnInit {
   faceUserEmitter = new EventEmitter<facebookUser>();
   constructor() {
     FB.init({
-      appId: '681654978666629',
+      appId: environment.facebookAppId,
       cookie: true,  // enable cookies to allow the server to access
       // the session 
       xfbml: true,  // parse social plugins on this page
@@ -29,20 +30,30 @@ export class FacebookService implements OnInit {
     });
   }
 
-  fetchFacebookUser(): Promise<facebookUser> {
+  public fetchFacebookUser(): Promise<facebookUser> {
     var user = new facebookUser();
-    return new Promise((filfill, reject) => {
-      this.fetchUserinfomation().then((data: any) => {
-        user.userid = data.id;
-        user.userName = data.name;
-        this.fetchUserPicture().then((pic) => user.profileImageUrl = pic).then(() => filfill(user))
+    if (this.currentUser) {
+      return new Promise((filfill, reject) => { filfill(this.currentUser) });
+    }
+    else {
+      return new Promise((filfill, reject) => {
+        this.fetchUserinfomation().then((data: any) => {
+          user.userid = data.id;
+          user.userName = data.name;
+          this.fetchUserPicture().then((pic) => user.profileImageUrl = pic).then(() => {
+            this.currentUser = user;
+            filfill(user);
+          }
+
+          )
+        }
+        )
       }
       )
     }
-    )
   }
 
-  facebookLogin(): Promise<boolean> {
+  public facebookLogin(): Promise<boolean> {
     return new Promise(
       (filfill, reject) => {
         FB.login((response) => {
@@ -60,22 +71,23 @@ export class FacebookService implements OnInit {
 
   }
 
-  facebookLogout(): Promise<boolean> {
-    return new Promise((filfill, reject) =>
-      FB.logout(response => {
-        this.setCurrentAndEmitEvent(null);
-        filfill(true);
-      }))
+  public facebookLogout(): Promise<boolean> {
+    return new Promise(
+      (filfill, reject) =>
+        FB.logout(
+          response => {
+            this.setCurrentAndEmitEvent(null);
+            filfill(true);
+          })
+    )
   }
 
 
-  checkStatus(): Promise<boolean> {
+  public checkStatus(): Promise<boolean> {
 
     return new Promise((filfill, reject) => {
       FB.getLoginStatus(response => {
-        console.log(response)
         if (response.status === 'connected') {
-
           filfill(true);
         }
         else {

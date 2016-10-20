@@ -6,8 +6,9 @@ import { BookingCalendarComponent } from './booking/booking-calendar/booking-cal
 import { BookingHomeComponent } from './booking/booking-home/booking-home.component';
 import { BookingNewEventComponent } from './booking/booking-new-event/booking-new-event.component'
 import { DataDrivenComponent } from './data-driven/data-driven.component';
-import { ServiceProviderComponent } from './service-provider/service-provider.component';
+import { ServiceProviderComponent, ServiceProviderCalenderComponent, ServiceProviderSetupComponent, ServiceProviderHomeComponent } from './service-provider';
 import { RegisterUserComponent } from './register-user/register-user.component';
+import { LogginGuard } from './logginGuard';
 const APP_ROUTE: Routes = [
     {
         path: '', component: HomeComponent
@@ -27,10 +28,10 @@ const APP_ROUTE: Routes = [
                 path: 'home', component: BookingHomeComponent
             },
             {
-                path: 'newevent', component: BookingNewEventComponent
+                path: 'newevent', component: BookingNewEventComponent, canActivate: [LogginGuard]
             },
             {
-                path: 'calendar', component: BookingCalendarComponent
+                path: 'calendar', component: BookingCalendarComponent, canActivate: [LogginGuard]
             }
 
         ]
@@ -38,6 +39,23 @@ const APP_ROUTE: Routes = [
     }
     , {
         path: 'serviceprovider', component: ServiceProviderComponent
+    },
+    {
+        path: 'serviceprovider', component: ServiceProviderComponent,
+        children: [
+
+            {
+                path: 'home', component: ServiceProviderHomeComponent
+            },
+            {
+                path: 'setup', component: ServiceProviderSetupComponent, canActivate: [LogginGuard]
+            },
+            {
+                path: 'calendar', component: ServiceProviderCalenderComponent, canActivate: [LogginGuard]
+            }
+
+        ]
+
     },
     {
         path: 'datadriven', component: DataDrivenComponent

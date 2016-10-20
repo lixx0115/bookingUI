@@ -3,25 +3,17 @@ import { FacebookService } from '../../facebook.service'
 import { Subscription } from 'rxjs'
 import { facebookUser } from '../../faceBookUser';
 @Component({
-  selector: 'app-booking-home',
-  templateUrl: './booking-home.component.html',
-  styleUrls: ['./booking-home.component.css']
+  selector: 'app-service-provider-home',
+  templateUrl: './service-provider-home.component.html',
+  styleUrls: ['./service-provider-home.component.css']
 })
-export class BookingHomeComponent implements OnInit, OnDestroy {
+export class ServiceProviderHomeComponent implements OnInit, OnDestroy {
 
   fuser: facebookUser;
   userSub: Subscription;
   isLoggedin: boolean = false;
   constructor(private facebookService: FacebookService) { }
 
-
-
-  onMouseEnter(item: number) {
-    this.newsFeed[item].class = this.newsFeed[item].class + " active";
-  }
-  onMouseout(item: number) {
-    this.newsFeed[item].class = this.newsFeed[item].class.replace(" active", "");
-  }
   newfeedClass: string = "list-group-item list-group-item-success";
   newfeedClassActive: string = "list-group-item list-group-item-success active";
 
@@ -39,7 +31,6 @@ export class BookingHomeComponent implements OnInit, OnDestroy {
     { message: "3 pm piano class", type: "canceled", class: this.newfeedClassCanceled }
 
   ]
-
   ngOnInit() {
     this.facebookService.checkStatus().then(isloggedin => {
       this.isLoggedin = isloggedin
@@ -62,6 +53,12 @@ export class BookingHomeComponent implements OnInit, OnDestroy {
       }
     )
 
+  }
+  onMouseEnter(item: number) {
+    this.newsFeed[item].class = this.newsFeed[item].class + " active";
+  }
+  onMouseout(item: number) {
+    this.newsFeed[item].class = this.newsFeed[item].class.replace(" active", "");
   }
   ngOnDestroy() {
     this.userSub.unsubscribe();

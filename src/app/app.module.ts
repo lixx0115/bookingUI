@@ -11,7 +11,6 @@ import { HomeComponent } from './home/home.component';
 import { SigninComponent } from './signin/signin.component';
 import { routing } from './routes';
 import { BookingComponent } from './booking/booking.component';
-import { ServiceProviderComponent } from './service-provider/service-provider.component';
 import { BookingCalendarComponent } from './booking/booking-calendar/booking-calendar.component';
 import { DataDrivenComponent } from './data-driven/data-driven.component';
 import { DoublePipe } from './double.pipe';
@@ -23,6 +22,11 @@ import { BookingNewEventComponent } from './booking/booking-new-event/booking-ne
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { FacebookloginComponent } from './facebooklogin/facebooklogin.component';
 import { FacebookService } from './facebook.service';
+import { EventService } from './event.service';
+import { ServiceProviderComponent, ServiceProviderSetupComponent, ServiceProviderHomeComponent, ServiceProviderCalenderComponent } from './service-provider/';
+import { LogginGuard } from './logginGuard';
+import { SearchService } from './search.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,6 +43,9 @@ import { FacebookService } from './facebook.service';
     BookingNewEventComponent,
     RegisterUserComponent,
     FacebookloginComponent,
+    ServiceProviderSetupComponent,
+    ServiceProviderHomeComponent,
+    ServiceProviderCalenderComponent
 
   ],
   imports: [
@@ -46,7 +53,7 @@ import { FacebookService } from './facebook.service';
     FormsModule, ReactiveFormsModule, HttpModule,
     routing, CalendarModule
   ],
-  providers: [FirebaseService, CalendarDateFormatter, CalendarEventTitle, FacebookService],
+  providers: [FirebaseService, CalendarDateFormatter, CalendarEventTitle, FacebookService, EventService, LogginGuard, SearchService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

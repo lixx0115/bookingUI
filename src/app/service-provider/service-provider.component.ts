@@ -1,27 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { FacebookService } from '../facebook.service';
 @Component({
   selector: 'app-service-provider',
   templateUrl: './service-provider.component.html',
   styleUrls: ['./service-provider.component.css']
 })
 export class ServiceProviderComponent implements OnInit {
-  user = {
-    username: "what is a name",
-    email: "name@mno.com",
-    password: "baddd",
-    gender: ""
-  };
-  genders = ['male', 'female'];
 
-  constructor() { }
+  constructor(private facebook: FacebookService, private router: Router) { }
 
   ngOnInit() {
+    this.router.navigate(['serviceprovider', 'home']);
   }
-  onSumbit(form: NgForm) {
-    // console.log(form.controls["username"].value);
-    //form.controls["name"].value
-    console.log(form.value);
-    console.log(this.user);
-  }
+
 }

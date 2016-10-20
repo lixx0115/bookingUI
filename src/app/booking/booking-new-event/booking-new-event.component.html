@@ -1,3 +1,24 @@
-<p>
-  booking-new-event works!
-</p>
+<div class="row">
+	<div class="col-md-6">
+		<label for="searchProvider">Find your provider</label>
+		<div class="input-group">
+
+			<input type="text" class="form-control" placeholder="Search for..." #searchTerm>
+			<span class="input-group-btn">
+			<button class="btn btn-default" type=" button " (click)="onSearch(searchTerm.value) "><span class="glyphicon glyphicon-search"></span></button>
+			</span>
+		</div>
+	</div>
+</div>
+
+
+<div class="panel panel-success ">
+	<div class="panel-heading " (click)="togglePanel()">
+		Search result <span [ngClass]="toggleClass"></span>
+	</div>
+	<div [ngClass]="panelClass ">
+		<div class="list-group " *ngIf="searchResult ">
+			<button *ngFor="let result of searchResult " type="button " class="list-group-item " (click)="onSearchResultClicked(result) ">{{result.name}}</button>
+		</div>
+	</div>
+</div>
