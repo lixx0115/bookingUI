@@ -26,6 +26,9 @@ import { EventService } from './event.service';
 import { ServiceProviderComponent, ServiceProviderSetupComponent, ServiceProviderHomeComponent, ServiceProviderCalenderComponent } from './service-provider/';
 import { LogginGuard } from './logginGuard';
 import { SearchService } from './search.service';
+import { SliderTimePipe } from './slider-time.pipe';
+import { CalendarComponent } from './shared/calendar/calendar.component';
+import { DevComponent } from './booking/dev/dev.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +48,10 @@ import { SearchService } from './search.service';
     FacebookloginComponent,
     ServiceProviderSetupComponent,
     ServiceProviderHomeComponent,
-    ServiceProviderCalenderComponent
+    ServiceProviderCalenderComponent,
+    SliderTimePipe,
+    CalendarComponent,
+    DevComponent
 
   ],
   imports: [

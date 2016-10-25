@@ -14,11 +14,18 @@
 
 <div class="panel panel-success ">
 	<div class="panel-heading " (click)="togglePanel()">
-		Search result <span [ngClass]="toggleClass"></span>
+		{{selectResult?.name}} <span [ngClass]="toggleClass"></span>
 	</div>
 	<div [ngClass]="panelClass ">
 		<div class="list-group " *ngIf="searchResult ">
 			<button *ngFor="let result of searchResult " type="button " class="list-group-item " (click)="onSearchResultClicked(result) ">{{result.name}}</button>
 		</div>
 	</div>
+</div>
+<div class="input-group date">
+	<input id="datepicker" class="form-control" (hide)="onDateSelected($event)">
+	<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+</div>
+<div *ngIf="calendarShow">
+	<app-calendar [onEventClicked]="onEventClicked" view="day" [showNav]="false" [viewDate]="viewDate"></app-calendar>
 </div>

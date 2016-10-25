@@ -2,5 +2,6 @@
 	<li routerLinkActive="active" role="presentation" class="active"><a routerLink="home">Home</a></li>
 	<li routerLinkActive="active" role="presentation" [class.disabled]="!facebook.currentUser"><a routerLink="calendar">My Calender</a></li>
 	<li routerLinkActive="active" role="presentation" [class.disabled]="!facebook.currentUser"><a routerLink="newevent">Book a new event</a></li>
+	<li routerLinkActive="active" role="presentation" [class.disabled]="!facebook.currentUser"><a routerLink="dev">Dev</a></li>
 </ul>
 <router-outlet></router-outlet>

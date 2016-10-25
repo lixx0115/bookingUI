@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { SearchService } from '../../search.service';
+import { CalendarEventAction, CalendarEvent } from 'angular2-calendar/dist/esm/src';
+
+declare var jQuery: any;
 @Component({
   selector: 'app-booking-new-event',
   templateUrl: './booking-new-event.component.html',
@@ -8,12 +11,22 @@ import { SearchService } from '../../search.service';
 export class BookingNewEventComponent implements OnInit {
 
   panelClass = ['panel', 'panel-success', 'panel-collapse', 'collapse'];
+
   searchResult: any
-  constructor(private searcher: SearchService) { }
+
+  selectResult: { name: string, id: string }
+
+  calendarShow: boolean = false;
+  constructor(private searcher: SearchService, private elementRef: ElementRef) { }
 
   toggleClass = ["glyphicon", "panel-right", "glyphicon-plus"]
 
+
+
   ngOnInit() {
+    jQuery("#datepicker").datepicker({
+      autoclose: true
+    }).on('hide', (e) => this.onDateSelected(e, this));
   }
   onSearch(searchTerm: string) {
     this.searcher.searchProvider(searchTerm).then(data => {
@@ -25,7 +38,23 @@ export class BookingNewEventComponent implements OnInit {
 
   }
   onSearchResultClicked(result: any) {
+    this.selectResult = result;
     this.togglePanel()
+  }
+
+  onEventClicked(event: any) {
+
+    console.log(event)
+    //  this.modalClass = this.editEvent;
+  }
+  onHourClicked($event) {
+    console.log($event)
+  }
+
+  onDateSelected(input: any, that: any) {
+    this.calendarShow = true
+    console.log(input.date);
+    that.viewDate = input.date;
   }
 
   togglePanel() {

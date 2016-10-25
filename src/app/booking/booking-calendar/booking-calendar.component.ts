@@ -32,8 +32,8 @@ const colors: any = {
 @Component({
   selector: 'app-booking-calendar',
   templateUrl: './booking-calendar.component.html',
-  styleUrls: ['./booking-calendar.component.css'],
-  encapsulation: ViewEncapsulation.None
+  // styleUrls: ['./booking-calendar.component.css'],
+  // encapsulation: ViewEncapsulation.None
 
 })
 export class BookingCalendarComponent {

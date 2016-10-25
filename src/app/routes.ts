@@ -9,6 +9,8 @@ import { DataDrivenComponent } from './data-driven/data-driven.component';
 import { ServiceProviderComponent, ServiceProviderCalenderComponent, ServiceProviderSetupComponent, ServiceProviderHomeComponent } from './service-provider';
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { LogginGuard } from './logginGuard';
+
+import { DevComponent } from './booking/dev/dev.component';
 const APP_ROUTE: Routes = [
     {
         path: '', component: HomeComponent
@@ -32,7 +34,11 @@ const APP_ROUTE: Routes = [
             },
             {
                 path: 'calendar', component: BookingCalendarComponent, canActivate: [LogginGuard]
+            },
+            {
+                path: 'dev', component: DevComponent, canActivate: [LogginGuard]
             }
+
 
         ]
 

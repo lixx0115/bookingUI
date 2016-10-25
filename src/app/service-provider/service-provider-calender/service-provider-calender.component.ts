@@ -33,8 +33,8 @@ const colors: any = {
 @Component({
   selector: 'app-service-provider-calender',
   templateUrl: './service-provider-calender.component.html',
-  styleUrls: ['./service-provider-calender.component.css'],
-  encapsulation: ViewEncapsulation.None
+  //styleUrls: ['./service-provider-calender.component.css'],
+  //encapsulation: ViewEncapsulation.None
 
 })
 export class ServiceProviderCalenderComponent implements OnInit {
