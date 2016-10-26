@@ -11,8 +11,12 @@
 	</div>
 </div>
 
+<div class="input-group date">
+	<input id="datepicker" class="form-control" (hide)="onDateSelected($event)">
+	<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+</div>
 
-<div class="panel panel-success ">
+<div class="panel panel-success " *ngIf="searchResult">
 	<div class="panel-heading " (click)="togglePanel()">
 		{{selectResult?.name}} <span [ngClass]="toggleClass"></span>
 	</div>
@@ -22,10 +26,6 @@
 		</div>
 	</div>
 </div>
-<div class="input-group date">
-	<input id="datepicker" class="form-control" (hide)="onDateSelected($event)">
-	<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-</div>
 <div *ngIf="calendarShow">
-	<app-calendar [onEventClicked]="onEventClicked" view="day" [showNav]="false" [viewDate]="viewDate"></app-calendar>
+	<app-calendar #calendar [onEventClicked]="onEventClicked" view="day" [showNav]="false" [viewDate]="viewDate" [events]="events"></app-calendar>
 </div>

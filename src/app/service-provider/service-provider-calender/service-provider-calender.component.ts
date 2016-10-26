@@ -1,40 +1,14 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CalendarEventAction, CalendarEvent } from 'angular2-calendar/dist/esm/src';
-
-import {
-  startOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addWeeks,
-  subWeeks,
-  addMonths,
-  subMonths,
-  subHours
-} from 'date-fns';
-
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3'
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF'
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA'
-  }
-};
+import { CalendarComponent, ActionCallBack } from '../../shared/'
+import { EventService } from '../../event.service';
+import { FacebookService } from '../../facebook.service'
+import { Event } from '../../event';
 
 @Component({
   selector: 'app-service-provider-calender',
   templateUrl: './service-provider-calender.component.html',
-  //styleUrls: ['./service-provider-calender.component.css'],
-  //encapsulation: ViewEncapsulation.None
+
 
 })
 export class ServiceProviderCalenderComponent implements OnInit {
@@ -50,91 +24,33 @@ export class ServiceProviderCalenderComponent implements OnInit {
 
   selectEvent: CalendarEvent;
 
-  actions: CalendarEventAction[] = [{
-    label: '<i class="fa fa-fw fa-pencil"></i>',
-    onClick: ({event}: { event: CalendarEvent }): void => {
-      console.log('Edit event', event);
-    }
-  }, {
-    label: '<i class="fa fa-fw fa-times"></i>',
-    onClick: ({event}: { event: CalendarEvent }): void => {
-      this.events = this.events.filter(iEvent => iEvent !== event);
-    }
-  }];
-
-  events: CalendarEvent[] = [{
-    start: subDays(startOfDay(new Date()), 1),
-    end: addDays(new Date(), 1),
-    title: 'A 3 day event',
-    color: colors.red,
-    actions: this.actions
-  }, {
-    start: startOfDay(new Date()),
-    title: 'my appoinment',
-    color: colors.yellow,
-    actions: this.actions,
-    allDay: true
-  }, {
-    start: subHours(new Date(), 3),
-    end: subHours(new Date(), 2),
-    title: 'my 1 hour event',
-    color: colors.red
-  },
-  {
-    start: subHours(new Date(), 5),
-    end: subHours(new Date(), 4),
-    title: 'my next 1 hour event',
-    color: colors.red
-  }
-  ];
+  events: Event[]
 
   activeDayIsOpen: boolean = true;
 
+
+
+  onCancel: ActionCallBack = function (event: CalendarEvent): Promise<boolean> {
+    return new Promise<boolean>((fulfill, reject) => {
+      console.log(event);
+      fulfill(true);
+    });
+  }
+  @ViewChild(CalendarComponent) calendar: CalendarComponent;
+  constructor(private eventService: EventService, private facebook: FacebookService) { }
+
   ngOnInit() {
-
+    this.eventService.getProviderEvents(this.facebook.currentUser.userid).then(
+      data => {
+        this.events = data;
+        this.calendar.createCalendarEvent(this.events);
+      })
   }
-
-  increment(): void {
-
-    const addFn: any = {
-      day: addDays,
-      week: addWeeks,
-      month: addMonths
-    }[this.view];
-
-    this.viewDate = addFn(this.viewDate, 1);
-
-  }
-
-  decrement(): void {
-
-    const subFn: any = {
-      day: subDays,
-      week: subWeeks,
-      month: subMonths
-    }[this.view];
-
-    this.viewDate = subFn(this.viewDate, 1);
-
-  }
-
-  today(): void {
-    this.viewDate = new Date();
-  }
-
-  dayClicked({date, events}: { date: Date, events: CalendarEvent[] }): void {
-
-    if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-        this.viewDate = date;
-      }
-    }
+  onEdit: ActionCallBack = function (event: CalendarEvent): Promise<boolean> {
+    return new Promise<boolean>((fulfill, reject) => {
+      console.log(event);
+      fulfill(true);
+    });
   }
 
   OnEventClicked(event: any) {

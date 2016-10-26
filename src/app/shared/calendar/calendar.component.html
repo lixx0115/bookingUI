@@ -26,12 +26,13 @@
 	</div>
 	<br>
 	<div [ngSwitch]="view">
-		<mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [activeDayIsOpen]="activeDayIsOpen"
+		<mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="_viewDate" [events]="calendarEvents" [activeDayIsOpen]="activeDayIsOpen"
 			(eventClicked)="OnEventClicked($event)" (dayClicked)="dayClicked($event.day)">
 		</mwl-calendar-month-view>
-		<mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" (eventClicked)="onEventClicked($event)">
+		<mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="_viewDate" [events]="calendarEvents" (eventClicked)="onEventClicked($event)">
 		</mwl-calendar-week-view>
-		<mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" (eventClicked)="onEventClicked($event)">
+		<mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="_viewDate" [events]="calendarEvents" [dayEndHour]="dayEndHour" [dayStartHour]="dayStartHour"
+			(eventClicked)="onEventClicked($event)">
 		</mwl-calendar-day-view>
 	</div>
 </div>
