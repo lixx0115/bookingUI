@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FacebookService } from '../../facebook.service'
 import { Subscription } from 'rxjs'
-import { facebookUser } from '../../faceBookUser';
+import { User } from '../../user';
 @Component({
   selector: 'app-service-provider-home',
   templateUrl: './service-provider-home.component.html',
@@ -9,7 +9,7 @@ import { facebookUser } from '../../faceBookUser';
 })
 export class ServiceProviderHomeComponent implements OnInit, OnDestroy {
 
-  fuser: facebookUser;
+  fuser: User;
   userSub: Subscription;
   isLoggedin: boolean = false;
   constructor(private facebookService: FacebookService) { }

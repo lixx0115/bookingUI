@@ -6,11 +6,30 @@ export class FirebaseService {
 
   constructor(private http: Http) { }
 
+  public generateKeyFromDate(input: Date) {
+
+    var curr_date = input.getDate();
+    var curr_month = input.getMonth() + 1; //Months are zero based
+    var curr_year = input.getFullYear();
+    return curr_year + "-" + curr_month + "-" + curr_date;
+  }
 
 
   public getData(keys: string[]) {
     var path = this.covertKeysToPath(keys);
-    return this.http.get('https://angular2-learn-12384.firebaseio.com' + path + '.json').toPromise().then(data => { return data.json() }).catch(err => {
+    console.log(this.http)
+    return this.http.get('https://angular2-learn-12384.firebaseio.com' + path + '.json').toPromise().then(data => {
+      let result = null
+      try {
+
+        result = data.json();
+      }
+      catch (err) {
+
+      }
+      console.log("done")
+      return result;
+    }).catch(err => {
       console.error(JSON.stringify(err));
     });
   }

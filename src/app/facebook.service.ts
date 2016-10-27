@@ -1,13 +1,14 @@
 import { Injectable, OnInit, EventEmitter } from '@angular/core';
-import { facebookUser } from './facebookUser';
+import { User } from './user';
 import { environment } from '../environments/environment'
+import { FirebaseService } from './firebase.service';
 declare const FB: any;
 @Injectable()
 export class FacebookService implements OnInit {
 
-  currentUser: facebookUser;
-  faceUserEmitter = new EventEmitter<facebookUser>();
-  constructor() {
+  currentUser: User;
+  faceUserEmitter = new EventEmitter<User>();
+  constructor(private firbase: FirebaseService) {
     FB.init({
       appId: environment.facebookAppId,
       cookie: true,  // enable cookies to allow the server to access
@@ -22,7 +23,7 @@ export class FacebookService implements OnInit {
     FB.getLoginStatus(response => {
       console.log(response)
       if (response.status === 'connected') {
-        this.fetchFacebookUser().then((d: facebookUser) => this.setCurrentAndEmitEvent(d));
+        this.fetchFacebookUser().then((d: User) => this.setCurrentAndEmitEvent(d));
       } else if (response.status === 'not_authorized') {
 
       } else {
@@ -30,35 +31,14 @@ export class FacebookService implements OnInit {
     });
   }
 
-  public fetchFacebookUser(): Promise<facebookUser> {
-    var user = new facebookUser();
-    if (this.currentUser) {
-      return new Promise((filfill, reject) => { filfill(this.currentUser) });
-    }
-    else {
-      return new Promise((filfill, reject) => {
-        this.fetchUserinfomation().then((data: any) => {
-          user.userid = data.id;
-          user.userName = data.name;
-          this.fetchUserPicture().then((pic) => user.profileImageUrl = pic).then(() => {
-            this.currentUser = user;
-            filfill(user);
-          }
 
-          )
-        }
-        )
-      }
-      )
-    }
-  }
 
   public facebookLogin(): Promise<boolean> {
     return new Promise(
       (filfill, reject) => {
         FB.login((response) => {
           if (response.authResponse) {
-            this.fetchFacebookUser().then((d: facebookUser) => this.setCurrentAndEmitEvent(d));
+            this.fetchFacebookUser().then((d: User) => this.setCurrentAndEmitEvent(d));
             filfill(true)
           }
           else {
@@ -88,7 +68,7 @@ export class FacebookService implements OnInit {
     return new Promise((filfill, reject) => {
       FB.getLoginStatus(response => {
         if (response.status === 'connected') {
-          filfill(true);
+          this.fetchFacebookUser().then(() => filfill(true))
         }
         else {
           filfill(false);
@@ -97,7 +77,27 @@ export class FacebookService implements OnInit {
     });
   }
 
-  private setCurrentAndEmitEvent(curentUser: facebookUser) {
+  public SaveUserProfile(user: User) {
+    this.currentUser = user;
+    return this.firbase.putData(["userProfile", user.userid], user);
+  }
+
+  private GetUserProfile(userId: string) {
+
+    return this.firbase.getData(["userProfile", userId]).then(
+      (data: User) => {
+        console.log("in get user profile")
+        if (data !== null) {
+          return data;
+        }
+        else {
+          return null;
+        }
+      }
+    );
+  }
+
+  private setCurrentAndEmitEvent(curentUser: User) {
     this.currentUser = curentUser;
     this.faceUserEmitter.emit(this.currentUser);
 
@@ -129,6 +129,35 @@ export class FacebookService implements OnInit {
     );
   }
 
+  public fetchFacebookUser(): Promise<User> {
+    var user = new User();
+    if (this.currentUser) {
+      return new Promise((filfill, reject) => { filfill(this.currentUser) });
+    }
+    else {
+      return new Promise((filfill, reject) => {
+        this.fetchUserinfomation().then((data: any) => {
+          user.userid = data.id;
+          user.userName = data.name;
+
+        }).then(() => { return this.fetchUserPicture(); }
+          ).then((url) => { user.profileImageUrl = url; return this.GetUserProfile(user.userid) }
+          ).then((profile) => {
+            console.log("in profile", profile)
+            if (profile != null) {
+              user.isConsumer = profile.isConsumer;
+              user.isProvider = profile.isProvider;
+              user.cellNumber = profile.cellNumber;
+              user.email = profile.email;
+              user.provider = profile.provider;
+            }
+            this.setCurrentAndEmitEvent(user);
+            filfill(this.currentUser)
+          }
+          )
+      })
+    }
+  }
 
 
 }

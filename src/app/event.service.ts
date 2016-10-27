@@ -40,13 +40,6 @@ export class EventService {
     return new Promise((fulfill, reject) => { fulfill(events) })
   }
 
-  private generateKeyFromDate(input: Date) {
-
-    var curr_date = input.getDate();
-    var curr_month = input.getMonth() + 1; //Months are zero based
-    var curr_year = input.getFullYear();
-    return curr_year + "-" + curr_month + "-" + curr_date;
-  }
 
 
   public getConsumerEvents(userid: string): Promise<Event[]> {
@@ -62,7 +55,7 @@ export class EventService {
     // return this.firebase.getData([userid, "provider"]);
   }
   public SaveEvent(consumerId: string, providerId: string, event: Event) {
-    var dateKey = this.generateKeyFromDate(event.start);
+    var dateKey = this.firebase.generateKeyFromDate(event.start);
     return this.firebase.putData([providerId, "event", dateKey], event)
   }
 

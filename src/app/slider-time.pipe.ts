@@ -6,8 +6,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class SliderTimePipe implements PipeTransform {
 
   transform(value: string, args?: any): string {
-    console.log(new Date())
-    console.log(value)
     if (!args) {
       return 'blocked'
     }

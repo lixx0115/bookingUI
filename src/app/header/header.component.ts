@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FacebookService } from '../facebook.service'
 import { Subscription } from 'rxjs'
-import { facebookUser } from '../faceBookUser';
+import { User } from '../user';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-header',
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   facebookUserSub: Subscription;
-  fuser: facebookUser;
+  fuser: User;
 
   userLoggedIn: Promise<boolean>;
   constructor(private facebookService: FacebookService, private router: Router) { }
@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     )
 
     this.facebookUserSub = this.facebookService.faceUserEmitter.subscribe(
-      (fuser: facebookUser) => {
+      (fuser: User) => {
         this.userLoggedIn = this.facebookService.checkStatus();
         this.fuser = fuser;
       }

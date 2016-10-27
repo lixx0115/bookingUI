@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 
 import { ReactiveFormsModule, FormBuilder } from "@angular/forms";
 
@@ -23,6 +23,8 @@ import { RegisterUserComponent } from './register-user/register-user.component';
 import { FacebookloginComponent } from './facebooklogin/facebooklogin.component';
 import { FacebookService } from './facebook.service';
 import { EventService } from './event.service';
+import { UserService } from './user.service';
+
 import { ServiceProviderComponent, ServiceProviderSetupComponent, ServiceProviderHomeComponent, ServiceProviderCalenderComponent } from './service-provider/';
 import { LogginGuard } from './logginGuard';
 import { SearchService } from './search.service';
@@ -59,7 +61,7 @@ import { DevComponent } from './booking/dev/dev.component';
     FormsModule, ReactiveFormsModule, HttpModule,
     routing, CalendarModule
   ],
-  providers: [FirebaseService, CalendarDateFormatter, CalendarEventTitle, FacebookService, EventService, LogginGuard, SearchService],
+  providers: [FirebaseService, CalendarDateFormatter, CalendarEventTitle, FacebookService, EventService, LogginGuard, SearchService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
