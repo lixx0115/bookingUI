@@ -14,13 +14,13 @@ export class User {
         description: string,
         website: string,
         hoursAvailable: {
-            monday: { blocked: boolean, start: number, end: number },
-            tusday: { blocked: boolean, start: number, end: number },
-            wednsday: { blocked: boolean, start: number, end: number },
-            thursday: { blocked: boolean, start: number, end: number },
-            friday: { blocked: boolean, start: number, end: number },
-            saturday: { blocked: boolean, start: number, end: number },
-            sunday: { blocked: boolean, start: number, end: number }
+            monday: { open: boolean, start: number, end: number },
+            tuesday: { open: boolean, start: number, end: number },
+            wednsday: { open: boolean, start: number, end: number },
+            thursday: { open: boolean, start: number, end: number },
+            friday: { open: boolean, start: number, end: number },
+            saturday: { open: boolean, start: number, end: number },
+            sunday: { open: boolean, start: number, end: number }
         }
     }
 }

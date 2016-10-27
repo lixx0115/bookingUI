@@ -17,7 +17,7 @@ export class ServiceProviderSetupComponent implements OnInit, AfterViewInit {
 
   dayblocked = ["block", "block", "block", "block", "block", "block", "block"]
 
-  hoursBlocks = ["9,17", "9,17", "9,17", "9,17", "9,17", "9,17", "9,17"]
+  hoursBlocks = new Array<string>()
 
   user: User;
 
@@ -26,22 +26,37 @@ export class ServiceProviderSetupComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.user = this.facebookService.currentUser;
+    for (let day of this.daysOfWeek) {
+      this.hoursBlocks.push(this.getHourRangeFromUserByDay(day).join(','))
+    }
     this.createEditForm(this.user);
 
   }
 
   ngAfterViewInit() {
-    let options: any = {};
-    options.formater = this.formate;
-    options.min = 0;
-    options.max = 24;
-    options.min = 0;
-    options.value = [9, 17];
+
 
     //jQuery('#slider0').slider(options);
     for (let day of this.daysOfWeek) {
+      let options: any = {};
+      options.formater = this.formate;
+      options.min = 0;
+      options.max = 24;
+      options.min = 0;
+      options.value = this.getHourRangeFromUserByDay(day);
       jQuery('#' + day).slider(options);
     }
+    for (let day of this.daysOfWeek) {
+      jQuery('#' + day).slider('setValue', this.getHourRangeFromUserByDay(day));
+    }
+  }
+
+  private getHourRangeFromUserByDay(day: string) {
+    let daylower = day.toLowerCase();
+    let start = this.user.provider && this.user.provider.hoursAvailable && this.user.provider.hoursAvailable[daylower].start;
+    let end = this.user.provider && this.user.provider.hoursAvailable && this.user.provider.hoursAvailable[daylower].end;
+    let result = [start, end];
+    return result;
   }
 
   onSubmit() {
@@ -78,6 +93,7 @@ export class ServiceProviderSetupComponent implements OnInit, AfterViewInit {
 
   private createEditForm(user: User) {
     let tags = user.provider && user.provider.tags && user.provider.tags.join() || '';
+    console.log(user);
     this.providerSetupForm = this.formBuilder.group(
       {
 
@@ -88,17 +104,18 @@ export class ServiceProviderSetupComponent implements OnInit, AfterViewInit {
         description: new FormControl(user.provider && user.provider.description || '', [Validators.required]),
         website: new FormControl(user.provider && user.provider.website || ''),
         availableHours: this.formBuilder.array([
-          new FormControl(),
-          new FormControl(),
-          new FormControl(),
-          new FormControl(),
-          new FormControl(),
-          new FormControl(),
-          new FormControl()
+          new FormControl(user.provider && user.provider.hoursAvailable && user.provider.hoursAvailable.monday && user.provider.hoursAvailable.monday.open),
+          new FormControl(user.provider && user.provider.hoursAvailable && user.provider.hoursAvailable.tuesday && user.provider.hoursAvailable.tuesday.open),
+          new FormControl(user.provider && user.provider.hoursAvailable && user.provider.hoursAvailable.wednsday && user.provider.hoursAvailable.wednsday.open),
+          new FormControl(user.provider && user.provider.hoursAvailable && user.provider.hoursAvailable.thursday && user.provider.hoursAvailable.thursday.open),
+          new FormControl(user.provider && user.provider.hoursAvailable && user.provider.hoursAvailable.friday && user.provider.hoursAvailable.friday.open),
+          new FormControl(user.provider && user.provider.hoursAvailable && user.provider.hoursAvailable.saturday && user.provider.hoursAvailable.saturday.open),
+          new FormControl(true)
         ],
 
         )
       })
+
   }
 
 
@@ -113,10 +130,10 @@ export class ServiceProviderSetupComponent implements OnInit, AfterViewInit {
 
     for (let i = 0; i < checkDays.length; i++) {
       if (checkDays[i]) {
-        setHours[this.daysOfWeek[i]] = { blocked: false, start: hours[i].start, end: hours[i].end }
+        setHours[this.daysOfWeek[i].toLowerCase()] = { open: true, start: hours[i].start, end: hours[i].end }
       }
       else {
-        setHours[this.daysOfWeek[i]] = { blocked: true, start: 9, end: 17 }
+        setHours[this.daysOfWeek[i].toLowerCase()] = { open: false, start: 9, end: 17 }
       }
     }
     return setHours;

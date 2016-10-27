@@ -60,7 +60,7 @@
 							<input id="{{day}}<" type="checkbox" #j (change)="onDayChecked(k)" formControlName="{{k}}"><label>{{day}}</label>
 						</div>
 					</div>
-					<div class="col-sm-6"> <b>12 am</b><input type="text" class="span2" value="9,17" [id]="day" #i> <b>midnight</b></div>
+					<div class="col-sm-6"> <b>12 am</b><input type="text" class="span2" [value]="hoursBlocks[k]" [id]="day" #i> <b>midnight</b></div>
 					<div class="col-sm-4 ">
 						<p> {{i.value|sliderTime:j.checked}}</p>
 					</div>
