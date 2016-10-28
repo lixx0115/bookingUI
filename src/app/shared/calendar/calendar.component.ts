@@ -1,6 +1,7 @@
-import { Component, Input, ApplicationRef } from '@angular/core';
+import { Component, Output, Input, ApplicationRef, EventEmitter } from '@angular/core';
 import { CalendarEventAction, CalendarEvent } from 'angular2-calendar/dist/esm/src';
-import { Event } from '../../Event';
+import { Event } from '../../event';
+import { HoursAvailable } from '../../hoursAvailable';
 import {
   startOfDay,
   subDays,
@@ -11,7 +12,8 @@ import {
   addWeeks,
   subWeeks,
   addMonths,
-  subMonths
+  subMonths,
+  addHours
 } from 'date-fns';
 
 const colors: any = {
@@ -36,13 +38,14 @@ const colors: any = {
 export class CalendarComponent {
 
   _viewDate: Date = new Date()
-
+  _hoursAvailable: HoursAvailable;
   @Input() view: string = 'month';
 
   @Input() showNav: boolean;
 
   @Input() public set viewDate(value: Date) {
     this._viewDate = value
+    this.setDayHourLimit(this._viewDate)
   }
 
   public get viewDate() {
@@ -57,11 +60,23 @@ export class CalendarComponent {
 
   @Input() change: number;
 
-  @Input() dayEndHour: number = 21;
+  @Output() hourSegmentClicked: EventEmitter<{ date: Date }> = new EventEmitter<{ date: Date }>();
 
-  @Input() dayStartHour: number = 6;
+  @Input() public set hoursAvailable(value: HoursAvailable) {
+    this._hoursAvailable = value;
+    this.setDayHourLimit(this._viewDate);
+  }
+
+  dayEndHour: number = 21;
+
+  dayStartHour: number = 6;
 
   _events: Event[] = new Array<Event>();
+
+  _dayCalendarEvent: CalendarEvent[] = new Array<CalendarEvent>();
+
+  daysOfWeek = ['sunday', 'monday'
+    , 'tuesday', 'wednsday', 'thursday', 'friday', 'saturday']
 
 
   calendarEvents = new Array<CalendarEvent>();
@@ -115,6 +130,7 @@ export class CalendarComponent {
     }
 
     this.calendarEvents = newCalendarEvents;
+    this._dayCalendarEvent = this.calendarEvents.slice();
   }
 
   increment(): void {
@@ -127,6 +143,7 @@ export class CalendarComponent {
 
     this.viewDate = addFn(this.viewDate, 1);
 
+
   }
 
   decrement(): void {
@@ -138,6 +155,7 @@ export class CalendarComponent {
     }[this.view];
 
     this.viewDate = subFn(this.viewDate, 1);
+
 
   }
 
@@ -156,12 +174,40 @@ export class CalendarComponent {
       } else {
         this.activeDayIsOpen = true;
         this.viewDate = date;
+
       }
     }
+
+  }
+  setDayHourLimit(dateValue: Date) {
+    var daystring = this.daysOfWeek[dateValue.getDay()];
+    if (this._hoursAvailable) {
+      console.log(dateValue, dateValue.getDay(), this._hoursAvailable[daystring], daystring)
+      this.dayStartHour = this._hoursAvailable[daystring].start;
+      this.dayEndHour = this._hoursAvailable[daystring].end;
+      this._dayCalendarEvent = this.calendarEvents.slice();
+      if (!this._hoursAvailable[daystring].open) {
+
+        this._dayCalendarEvent.push(
+          {
+            start: addHours(startOfDay(dateValue), this._hoursAvailable[daystring].start),
+            end: addHours(startOfDay(dateValue), this._hoursAvailable[daystring].end + 1),
+            title: 'blocked by provider',
+            color: colors.red
+          }
+        )
+      }
+
+    }
+    else {
+      console.log(daystring);
+    }
+
   }
 
-
-
+  onHourSegmentClicked(event: any) {
+    this.hourSegmentClicked.emit(event);
+  }
 
 }
 

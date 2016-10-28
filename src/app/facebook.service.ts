@@ -82,7 +82,7 @@ export class FacebookService implements OnInit {
     return this.firbase.putData(["userProfile", user.userid], user);
   }
 
-  private GetUserProfile(userId: string) {
+  public GetUserProfile(userId: string) {
 
     return this.firbase.getData(["userProfile", userId]).then(
       (data: User) => {

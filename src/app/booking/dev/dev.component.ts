@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { EventService } from '../../event.service';
 import { Event } from '../../event';
 import { FacebookService } from '../../facebook.service'
+import { User } from '../../user'
 import { CalendarComponent, ActionCallBack } from '../../shared/'
 import { CalendarEvent } from 'angular2-calendar/dist/esm/src';
 @Component({
@@ -12,6 +13,10 @@ import { CalendarEvent } from 'angular2-calendar/dist/esm/src';
 export class DevComponent implements OnInit {
 
   events: Event[];
+
+  currentUser: User;
+
+  viewDate: Date = new Date();
 
   onEdit: ActionCallBack = function (event: CalendarEvent): Promise<boolean> {
     return new Promise<boolean>((fulfill, reject) => {
@@ -39,8 +44,16 @@ export class DevComponent implements OnInit {
       }
     )
 
+    this.currentUser = this.facebook.currentUser;
+
+
   }
   OnEventClicked(event: any) {
     console.log(event);
+  }
+
+  hourSegmentClicked(event: any) {
+    console.log(event.date)
+    console.log(this.currentUser)
   }
 }
