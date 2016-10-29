@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { FirebaseService } from './firebase.service';
+import { User } from './user';
 
 @Injectable()
 export class SearchService {
 
-  constructor(private http: Http) { }
+  constructor(private fireBase: FirebaseService) { }
 
   searchResult = [
     { name: "Ms Jone music school", id: "1" },
@@ -14,7 +15,17 @@ export class SearchService {
     { name: "Ms Allen music school", id: "5" },
   ]
   public searchProvider(searchTeam: string) {
-    return new Promise((filfull, reject) => filfull(this.searchResult));
+    // return new Promise((filfull, reject) => filfull(this.searchResult));
+    return this.fireBase.getData(['userProfile']).then((data) => {
+      let result = new Array<User>();
+      let idlist = Object.keys(data);
+      for (let id of idlist) {
+        if (data[id].isProvider) {
+          result.push(data[id]);
+        }
+      }
+      return result;
+    })
   }
 
 

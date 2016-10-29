@@ -1,2 +1,2 @@
-<app-calendar [onEventClicked]="OnEventClicked" view="month" [showNav]="true" [onEventEdit]="onEdit" [onEventCancel]="onCancel"
+<app-calendar (EventClicked)="OnEventClicked($event)" view="month" [showNav]="true" [onEventEdit]="onEdit" [onEventCancel]="onCancel"
 	[hoursAvailable]="this.currentUser.provider.hoursAvailable" [viewDate]="viewDate" (hourSegmentClicked)="hourSegmentClicked($event)"></app-calendar>

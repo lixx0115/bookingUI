@@ -27,7 +27,11 @@ export class EventService {
           start: subHours(new Date(), i + 3),
           end: subHours(new Date(), i + 2),
           title: 'my ' + i + ' hour event',
-          party: new Array<string>()
+          party: [
+            { id: '1', name: 'great teach', isProvider: true },
+            { id: '2', name: 'super mom', isProvider: false }
+
+          ]
 
         }
       )

@@ -1,4 +1,4 @@
-<app-calendar [onEventClicked]="OnEventClicked" view="month" [showNav]="true" [onEventEdit]="onEdit" [onEventCancel]="onCancel"></app-calendar>
+<app-calendar (EventClicked)="OnEventClicked($event)" view="month" [showNav]="true" [onEventEdit]="onEdit" [onEventCancel]="onCancel"></app-calendar>
 <div id="myModal" [class]="modalClass">
 	<div class="modal-dialog input-group">
 		<div class="modal-content">

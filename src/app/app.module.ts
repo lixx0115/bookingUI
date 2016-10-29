@@ -29,9 +29,11 @@ import { ServiceProviderComponent, ServiceProviderSetupComponent, ServiceProvide
 import { LogginGuard } from './logginGuard';
 import { SearchService } from './search.service';
 import { SliderTimePipe } from './slider-time.pipe';
-import { CalendarComponent } from './shared/calendar/calendar.component';
+import { CalendarComponent } from './shared';
 import { DevComponent } from './booking/dev/dev.component';
-
+import { ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+import { EventCreationComponent } from './shared/event-creation/event-creation.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,15 +55,17 @@ import { DevComponent } from './booking/dev/dev.component';
     ServiceProviderCalenderComponent,
     SliderTimePipe,
     CalendarComponent,
-    DevComponent
+    DevComponent, EventCreationComponent
 
   ],
   imports: [
     BrowserModule,
     FormsModule, ReactiveFormsModule, HttpModule,
-    routing, CalendarModule
+    routing, CalendarModule, ModalModule.forRoot(), BootstrapModalModule
   ],
   providers: [FirebaseService, CalendarDateFormatter, CalendarEventTitle, FacebookService, EventService, LogginGuard, SearchService, UserService],
-  bootstrap: [AppComponent]
+
+  bootstrap: [AppComponent],
+  entryComponents: [EventCreationComponent]
 })
 export class AppModule { }

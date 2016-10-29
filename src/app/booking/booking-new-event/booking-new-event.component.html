@@ -11,21 +11,24 @@
 	</div>
 </div>
 
-<div class="input-group date">
-	<input id="datepicker" class="form-control" (hide)="onDateSelected($event)">
-	<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-</div>
 
 <div class="panel panel-success " *ngIf="searchResult">
 	<div class="panel-heading " (click)="togglePanel()">
-		{{selectResult?.name}} <span [ngClass]="toggleClass"></span>
+		{{selectResult?.userName}} <span [ngClass]="toggleClass"></span>
 	</div>
 	<div [ngClass]="panelClass ">
 		<div class="list-group " *ngIf="searchResult ">
-			<button *ngFor="let result of searchResult " type="button " class="list-group-item " (click)="onSearchResultClicked(result) ">{{result.name}}</button>
+			<button *ngFor="let result of searchResult " type="button " class="list-group-item " (click)="onSearchResultClicked(result) ">{{result.userName}} Email:{{result.email}}</button>
 		</div>
 	</div>
 </div>
+<div [ngClass]="datepickerClass">
+	<div class="input-group date">
+		<input id="datepicker" class="form-control" (hide)="onDateSelected($event)">
+		<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+	</div>
+</div>
 <div *ngIf="calendarShow">
-	<app-calendar #calendar [onEventClicked]="onEventClicked" view="day" [showNav]="false" [viewDate]="viewDate" [events]="events"></app-calendar>
+	<app-calendar #calendar (EventClicked)="onEventClicked($event)" view="day" [showNav]="false" [viewDate]="viewDate" [events]="events"
+		[hoursAvailable]="this.selectResult.provider.hoursAvailable" (hourSegmentClicked)="onHourSegmentClicked($event)"></app-calendar>
 </div>

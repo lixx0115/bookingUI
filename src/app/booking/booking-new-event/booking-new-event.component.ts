@@ -1,9 +1,14 @@
-import { Component, OnInit, ViewChildren, QueryList, AfterViewInit, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, AfterViewInit, ViewContainerRef } from '@angular/core';
+import { Overlay } from 'angular2-modal';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
+
 import { SearchService } from '../../search.service';
 import { CalendarEventAction, CalendarEvent } from 'angular2-calendar/dist/esm/src';
-import { CalendarComponent, ActionCallBack } from '../../shared/'
+import { CalendarComponent, ActionCallBack, EventCreationComponentData, EventCreationComponent } from '../../shared/'
+
 import { EventService } from '../../event.service';
 import { Event } from '../../event';
+import { User } from '../../user';
 
 declare var jQuery: any;
 @Component({
@@ -15,9 +20,9 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
 
   panelClass = ['panel', 'panel-success', 'panel-collapse', 'collapse'];
 
-  searchResult: any
+  searchResult: User[]
 
-  selectResult: { name: string, id: string }
+  selectResult: User;
 
   calendarShow: boolean = false;
 
@@ -27,9 +32,13 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
 
   calendar: CalendarComponent;
 
-  constructor(private searcher: SearchService, private eventService: EventService) { }
+  constructor(private searcher: SearchService, private eventService: EventService, overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal) {
+    overlay.defaultViewContainer = vcRef;
+  }
 
   toggleClass = ["glyphicon", "panel-right", "glyphicon-plus"]
+
+  datepickerClass = ["hidden "]
 
   events: Event[];
 
@@ -57,19 +66,25 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
       this.searchResult = data;
       if (this.panelClass.length == 4) {
         this.togglePanel()
-        this.events = (<Event[]>data);
+        // this.events = (<Event[]>data);
       }
     })
 
   }
   onSearchResultClicked(result: any) {
     this.selectResult = result;
-    this.eventService.getProviderEvents(this.selectResult.id).then(data => {
+    this.eventService.getProviderEvents(this.selectResult.userid).then(data => {
       this.events = data;
       this.togglePanel()
+      this.datepickerClass = [];
     }
     );
 
+  }
+
+  onHourSegmentClicked(event: any) {
+
+    this.modal.open(EventCreationComponent, new EventCreationComponentData(new Date(), this.selectResult.userName));
   }
 
   onEventClicked(event: any) {
