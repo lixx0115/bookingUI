@@ -27,7 +27,7 @@
 	<br>
 	<div [ngSwitch]="view">
 		<mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="_viewDate" [events]="calendarEvents" [activeDayIsOpen]="activeDayIsOpen"
-			(eventClicked)="OnEventClicked($event)" (dayClicked)="dayClicked($event.day)">
+			[dayModifier]="dayModifier" (eventClicked)="onEventClicked($event)" (dayClicked)="dayClicked($event.day)">
 		</mwl-calendar-month-view>
 		<mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="_viewDate" [events]="calendarEvents" (eventClicked)="onEventClicked($event)">
 		</mwl-calendar-week-view>

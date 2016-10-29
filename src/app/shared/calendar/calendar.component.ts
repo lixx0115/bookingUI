@@ -48,11 +48,8 @@ export class CalendarComponent {
     this.setDayHourLimit(this._viewDate)
   }
 
-  public get viewDate() {
-    return this._viewDate;
-  }
 
-  @Input() onEventClicked;
+  @Output() EventClicked: EventEmitter<CalendarEvent> = new EventEmitter<CalendarEvent>();
 
   @Input() onEventEdit: ActionCallBack;
 
@@ -65,7 +62,22 @@ export class CalendarComponent {
   @Input() public set hoursAvailable(value: HoursAvailable) {
     this._hoursAvailable = value;
     this.setDayHourLimit(this._viewDate);
+    this.dayModifier = (date: any) => {
+      date.cssClass = this.setDayColor(date.date, this._hoursAvailable);
+
+    }
   }
+
+  @Input() public set events(value: Event[]) {
+    this._events = value;
+    this.createCalendarEvent(this._events);
+  }
+
+
+  public get viewDate() {
+    return this._viewDate;
+  }
+
 
   dayEndHour: number = 21;
 
@@ -83,10 +95,6 @@ export class CalendarComponent {
 
 
 
-  @Input() public set events(value: Event[]) {
-    this._events = value;
-    this.createCalendarEvent(this._events);
-  }
 
 
   selectEvent: CalendarEvent;
@@ -113,9 +121,13 @@ export class CalendarComponent {
 
   }
 
+  onEventClicked(event: CalendarEvent) {
+    this.EventClicked.emit(event);
+  }
+
   createCalendarEvent(events: Event[]) {
     this._events = events;
-    let newCalendarEvents = Array<CalendarEvent>();
+    let newCalendarEvents = Array<any>();
     for (let event of this._events) {
       newCalendarEvents.push(
         {
@@ -123,7 +135,8 @@ export class CalendarComponent {
           end: event.end,
           title: event.title,
           actions: this.actions,
-          color: colors.blue
+          color: colors.blue,
+          originalEvent: event
         }
 
       )
@@ -163,6 +176,8 @@ export class CalendarComponent {
     this.viewDate = new Date();
   }
 
+
+
   dayClicked({ date, events }: { date: Date, events: CalendarEvent[] }): void {
 
     if (isSameMonth(date, this.viewDate)) {
@@ -201,6 +216,25 @@ export class CalendarComponent {
     }
     else {
       console.log(daystring);
+    }
+
+  }
+
+  dayModifier;
+
+  setDayColor(dateValue: Date, hoursAvailable: HoursAvailable) {
+    var daystring = this.daysOfWeek[dateValue.getDay()];
+    if (this._hoursAvailable) {
+
+      if (!this._hoursAvailable[daystring].open) {
+
+        return 'bg-danger text-info'
+
+      }
+
+    }
+    else {
+      return '';
     }
 
   }
