@@ -3,10 +3,10 @@ import { EventService } from '../../event.service';
 import { Event } from '../../event';
 import { FacebookService } from '../../facebook.service'
 import { User } from '../../user'
-import { CalendarComponent, ActionCallBack } from '../../shared/'
+import { CalendarComponent, ActionCallBack, EventCreationComponentData, EventCreationComponent } from '../../shared/'
 import { CalendarEvent } from 'angular2-calendar/dist/esm/src';
-import { Overlay } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { Overlay, overlayConfigFactory } from 'angular2-modal';
+import { Modal, BSModalContext } from 'angular2-modal/plugins/bootstrap';
 
 @Component({
   selector: 'app-dev',
@@ -63,7 +63,7 @@ export class DevComponent implements OnInit {
         if (!this.modal) {
           this.modal = new Modal(this.overlay);
         }
-        */
+     
     this.modal.alert()
       .size('lg')
       .showClose(true)
@@ -79,7 +79,9 @@ export class DevComponent implements OnInit {
                 <li>Close wth button click</li>
                 <li>HTML content</li>
             </ul>`)
-      .open();
+      .open();   */
+
+    //this.modal.open(EventCreationComponent, overlayConfigFactory(new EventCreationComponentData(new Date(), 'test', "adb", "123", "346"), BSModalContext));
   }
 
   hourSegmentClicked(event: any) {

@@ -14,7 +14,7 @@
 
 <div class="panel panel-success " *ngIf="searchResult">
 	<div class="panel-heading " (click)="togglePanel()">
-		{{selectResult?.userName}} <span [ngClass]="toggleClass"></span>
+		{{selectProvider?.userName}} <span [ngClass]="toggleClass"></span>
 	</div>
 	<div [ngClass]="panelClass ">
 		<div class="list-group " *ngIf="searchResult ">
@@ -30,5 +30,5 @@
 </div>
 <div *ngIf="calendarShow">
 	<app-calendar #calendar (EventClicked)="onEventClicked($event)" view="day" [showNav]="false" [viewDate]="viewDate" [events]="events"
-		[hoursAvailable]="this.selectResult.provider.hoursAvailable" (hourSegmentClicked)="onHourSegmentClicked($event)"></app-calendar>
+		[hoursAvailable]="this.selectProvider.provider.hoursAvailable" (hourSegmentClicked)="onHourSegmentClicked($event)"></app-calendar>
 </div>

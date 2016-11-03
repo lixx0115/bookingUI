@@ -21,7 +21,7 @@ export class FacebookService implements OnInit {
 
   ngOnInit() {
     FB.getLoginStatus(response => {
-      console.log(response)
+
       if (response.status === 'connected') {
         this.fetchFacebookUser().then((d: User) => this.setCurrentAndEmitEvent(d));
       } else if (response.status === 'not_authorized') {
@@ -86,7 +86,7 @@ export class FacebookService implements OnInit {
 
     return this.firbase.getData(["userProfile", userId]).then(
       (data: User) => {
-        console.log("in get user profile")
+
         if (data !== null) {
           return data;
         }
@@ -109,7 +109,7 @@ export class FacebookService implements OnInit {
     }
     return new Promise((filfill, reject) => {
       FB.api('/me', (response) => {
-        console.log(response)
+
         user.name = response.name
         user.id = response.id
         filfill(user)
@@ -122,7 +122,7 @@ export class FacebookService implements OnInit {
   private fetchUserPicture(): Promise<string> {
     return new Promise((filfill, reject) => {
       FB.api("/me/picture", (response) => {
-        console.log(response)
+
         filfill(response.data.url);
       });
     }
@@ -143,7 +143,7 @@ export class FacebookService implements OnInit {
         }).then(() => { return this.fetchUserPicture(); }
           ).then((url) => { user.profileImageUrl = url; return this.GetUserProfile(user.userid) }
           ).then((profile) => {
-            console.log("in profile", profile)
+
             if (profile != null) {
               user.isConsumer = profile.isConsumer;
               user.isProvider = profile.isProvider;

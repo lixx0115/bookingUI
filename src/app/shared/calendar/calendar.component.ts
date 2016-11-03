@@ -70,6 +70,7 @@ export class CalendarComponent {
 
   @Input() public set events(value: Event[]) {
     this._events = value;
+
     this.createCalendarEvent(this._events);
   }
 
@@ -144,6 +145,7 @@ export class CalendarComponent {
 
     this.calendarEvents = newCalendarEvents;
     this._dayCalendarEvent = this.calendarEvents.slice();
+    console.log(this._dayCalendarEvent);
   }
 
   increment(): void {

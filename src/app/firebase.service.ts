@@ -17,15 +17,16 @@ export class FirebaseService {
 
   public getData(keys: string[]) {
     var path = this.covertKeysToPath(keys);
-    console.log(this.http)
+    console.log('https://angular2-learn-12384.firebaseio.com' + path + '.json')
     return this.http.get('https://angular2-learn-12384.firebaseio.com' + path + '.json').toPromise().then(data => {
+
       let result = null
       try {
 
         result = data.json();
       }
       catch (err) {
-
+        console.log('error ', err)
       }
       console.log("done")
       return result;

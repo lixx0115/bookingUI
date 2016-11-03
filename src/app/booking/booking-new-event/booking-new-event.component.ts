@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, AfterViewInit, ViewContainerRef } from '@angular/core';
-import { Overlay } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { Overlay, overlayConfigFactory } from 'angular2-modal';
+import { Modal, BSModalContext } from 'angular2-modal/plugins/bootstrap';
 
 import { SearchService } from '../../search.service';
 import { CalendarEventAction, CalendarEvent } from 'angular2-calendar/dist/esm/src';
@@ -9,7 +9,7 @@ import { CalendarComponent, ActionCallBack, EventCreationComponentData, EventCre
 import { EventService } from '../../event.service';
 import { Event } from '../../event';
 import { User } from '../../user';
-
+import { FacebookService } from '../../facebook.service';
 declare var jQuery: any;
 @Component({
   selector: 'app-booking-new-event',
@@ -20,9 +20,11 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
 
   panelClass = ['panel', 'panel-success', 'panel-collapse', 'collapse'];
 
-  searchResult: User[]
+  searchResult: User[];
 
-  selectResult: User;
+  selectProvider: User;
+
+  currentLoginUser: User;
 
   calendarShow: boolean = false;
 
@@ -32,7 +34,7 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
 
   calendar: CalendarComponent;
 
-  constructor(private searcher: SearchService, private eventService: EventService, overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal) {
+  constructor(private faceBookService: FacebookService, private searcher: SearchService, private eventService: EventService, overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal) {
     overlay.defaultViewContainer = vcRef;
   }
 
@@ -51,11 +53,11 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.calendars.changes.subscribe(
       (comps: QueryList<CalendarComponent>) => {
+
         this.calendar = comps.first;
-        console.log(this.events);
+
         this.calendar.createCalendarEvent(this.events);
-        console.log(this.calendar);
-        console.log("change detected")
+
         this.change += 1;
       }
     )
@@ -72,8 +74,9 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
 
   }
   onSearchResultClicked(result: any) {
-    this.selectResult = result;
-    this.eventService.getProviderEvents(this.selectResult.userid).then(data => {
+    this.selectProvider = result;
+    this.eventService.getProviderEvents(this.selectProvider.userid).then(data => {
+
       this.events = data;
       this.togglePanel()
       this.datepickerClass = [];
@@ -83,8 +86,22 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
   }
 
   onHourSegmentClicked(event: any) {
+    this.modal.open(EventCreationComponent, overlayConfigFactory(
+      new EventCreationComponentData(
+        event.date,
+        this.selectProvider.userName,
+        this.faceBookService.currentUser.userName,
+        this.selectProvider.userid,
+        this.faceBookService.currentUser.userid,
+        (event) => { this.onEventCreated(event) }
+      ), BSModalContext)).then
+      (() => console.log("modal closed"));
+  }
 
-    this.modal.open(EventCreationComponent, new EventCreationComponentData(new Date(), this.selectResult.userName));
+  onEventCreated(createdEvent: Event) {
+    console.log("react to crate", createdEvent)
+    this.events.push(createdEvent);
+    this.events = this.events.slice();
   }
 
   onEventClicked(event: any) {
@@ -98,9 +115,8 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
 
   onDateSelected(input: any, that: any) {
     this.calendarShow = true
-    console.log(input.date);
+
     that.viewDate = input.date;
-    console.log(this.calendar);
   }
 
   togglePanel() {
