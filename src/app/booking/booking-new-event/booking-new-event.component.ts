@@ -114,8 +114,9 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
   }
 
   onDateSelected(input: any, that: any) {
-    this.calendarShow = true
 
+
+    this.calendarShow = true
     that.viewDate = input.date;
   }
 

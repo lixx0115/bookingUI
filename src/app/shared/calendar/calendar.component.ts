@@ -110,7 +110,7 @@ export class CalendarComponent {
     onClick: ({event}: { event: CalendarEvent }): void => {
       this.onEventCancel(event).then(
         (result) => {
-          this.calendarEvents = this.calendarEvents.filter(iEvent => iEvent !== event);
+          this.deleteEvent(event);
         })
     }
   }];
@@ -145,7 +145,6 @@ export class CalendarComponent {
 
     this.calendarEvents = newCalendarEvents;
     this._dayCalendarEvent = this.calendarEvents.slice();
-    console.log(this._dayCalendarEvent);
   }
 
   increment(): void {
@@ -243,6 +242,12 @@ export class CalendarComponent {
 
   onHourSegmentClicked(event: any) {
     this.hourSegmentClicked.emit(event);
+  }
+
+
+  private deleteEvent(event: CalendarEvent) {
+    this.calendarEvents = this.calendarEvents.filter(iEvent => iEvent !== event);
+    this._dayCalendarEvent = this._dayCalendarEvent.filter(iEvent => iEvent !== event);
   }
 
 }

@@ -97,6 +97,7 @@ export class EventCreationComponent implements ModalComponent<EventCreationCompo
       return Event.isOverlapWithEvents(newEvent, dayEvents);
     }
     ).then((isOverlap) => {
+      console.log("overlap check", isOverlap)
       if (isOverlap) {
         console.log("overlap")
       }
