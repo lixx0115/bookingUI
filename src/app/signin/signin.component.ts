@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
 export class SigninComponent implements OnInit {
   user = {
     username: "what is a name",
-    email: "name@mno.com",
-    password: "baddd",
+    email: "",
+    password: "",
     gender: ""
   };
   genders = ['male', 'female'];

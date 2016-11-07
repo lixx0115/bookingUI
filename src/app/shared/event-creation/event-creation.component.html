@@ -27,6 +27,12 @@
 				</div>
 			</div>
 		</div>
+		<div class="row" *ngIf="showWarning">
+			<div class="alert alert-danger alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<strong>Overlap with other event!</strong> Please choose other time.
+			</div>
+		</div>
 		<button type="submit" class="btn btn-primary right" [disabled]="!eventCreationForm.valid">Save</button>
 		<button class="btn btn-primary right" (click)="onCancel()">Cancel</button>
 

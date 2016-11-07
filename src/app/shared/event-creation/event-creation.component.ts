@@ -47,6 +47,7 @@ export class EventCreationComponent implements ModalComponent<EventCreationCompo
 
   title: string;
 
+  showWarning: boolean = false;
 
   @Output() eventCreated = new EventEmitter<Event>();
 
@@ -99,7 +100,7 @@ export class EventCreationComponent implements ModalComponent<EventCreationCompo
     ).then((isOverlap) => {
       console.log("overlap check", isOverlap)
       if (isOverlap) {
-        console.log("overlap")
+        this.showWarning = true;
       }
       else {
         this.eventService.CreateEvent(this.context.consumerId, this.context.providerId, newEvent).then(

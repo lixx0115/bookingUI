@@ -7,7 +7,7 @@ import { Observable } from "rxjs/Rx"
   styleUrls: ['./register-user.component.css']
 })
 export class RegisterUserComponent implements OnInit {
- genders = ['male', 'female'];
+  genders = ['male', 'female'];
   myForm: FormGroup;
   constructor(private formBuilder: FormBuilder) { }
 
@@ -16,10 +16,8 @@ export class RegisterUserComponent implements OnInit {
       username: new FormControl("huan li", [Validators.required, this.exampleValidator], this.asyncExampleValidator),
       email: new FormControl("something@somewhere.com", [Validators.required, Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")]),
       password: new FormControl("", [Validators.required]),
-      gender: new FormControl('male', Validators.required),
-      hobbies: this.formBuilder.array([
-        new FormControl("", Validators.required)]
-      )
+      gender: new FormControl('male', Validators.required)
+
     });
 
     this.myForm.statusChanges.subscribe(
@@ -32,10 +30,7 @@ export class RegisterUserComponent implements OnInit {
   }
 
 
-  onAddHobbies() {
-    (<FormArray>this.myForm.controls["hobbies"]).controls.push(new FormControl("", Validators.required));
 
-  }
   onSubmit() {
     console.log(this.myForm);
   }
