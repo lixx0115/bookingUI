@@ -89,10 +89,8 @@ export class BookingNewEventComponent implements OnInit, AfterViewInit {
     this.modal.open(EventCreationComponent, overlayConfigFactory(
       new EventCreationComponentData(
         event.date,
-        this.selectProvider.userName,
-        this.faceBookService.currentUser.userName,
-        this.selectProvider.userid,
-        this.faceBookService.currentUser.userid,
+        this.selectProvider,
+        this.faceBookService.currentUser,
         (event) => { this.onEventCreated(event) }
       ), BSModalContext)).then
       (() => console.log("modal closed"));

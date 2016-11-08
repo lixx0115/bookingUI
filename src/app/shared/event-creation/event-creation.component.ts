@@ -4,11 +4,12 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { addHours } from 'date-fns';
 import { EventService } from '../../event.service';
 import { Event, Party } from '../../event';
+import { User } from '../../user';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from "@angular/forms";
 
 export class EventCreationComponentData extends BSModalContext {
 
-  constructor(public date: Date, public providerName: string, public consumerName: string, public providerId: string, public consumerId: string, public onEventCreated: any) {
+  constructor(public date: Date, public provider: User, public consumer: User, public onEventCreated: any) {
     super();
   }
 }
@@ -49,6 +50,8 @@ export class EventCreationComponent implements ModalComponent<EventCreationCompo
 
   showWarning: boolean = false;
 
+  errorMessage: string = '';
+
   @Output() eventCreated = new EventEmitter<Event>();
 
   constructor(public dialog: DialogRef<EventCreationComponentData>, private eventService: EventService, private formBuilder: FormBuilder) {
@@ -56,7 +59,7 @@ export class EventCreationComponent implements ModalComponent<EventCreationCompo
     this.context = dialog.context;
     this.start = this.context.date;
     this.end = addHours(this.context.date, 1);
-    this.title = 'event with ' + this.context.providerName;
+    this.title = 'event with ' + this.context.provider.userName;
 
     this.eventCreationForm = this.formBuilder.group(
       {
@@ -73,16 +76,20 @@ export class EventCreationComponent implements ModalComponent<EventCreationCompo
     this.dialog.close();
   }
 
+  onFocus() {
+    this.showWarning = false;
+  }
+
   onSubmit() {
     //  this.eventService.SaveEvent(this.context.providerName)
     let newEvent = new Event();
     let provider = new Party();
     let consumer = new Party();
-    provider.id = this.context.providerId;
-    provider.name = this.context.providerName;
+    provider.id = this.context.provider.userid;
+    provider.name = this.context.provider.userName;
     provider.isProvider = true;
-    consumer.id = this.context.consumerId;
-    consumer.name = this.context.consumerName;
+    consumer.id = this.context.consumer.userid;
+    consumer.name = this.context.consumer.userName;
     consumer.isProvider = false;
 
     newEvent.allDay = false;
@@ -98,12 +105,16 @@ export class EventCreationComponent implements ModalComponent<EventCreationCompo
       return Event.isOverlapWithEvents(newEvent, dayEvents);
     }
     ).then((isOverlap) => {
-      console.log("overlap check", isOverlap)
       if (isOverlap) {
+        this.errorMessage = "Overlap with other event";
+        this.showWarning = true;
+      }
+      else if (!User.IsAllowed(newEvent, this.context.provider)) {
+        this.errorMessage = "Block by provider";
         this.showWarning = true;
       }
       else {
-        this.eventService.CreateEvent(this.context.consumerId, this.context.providerId, newEvent).then(
+        this.eventService.CreateEvent(this.context.consumer.userid, this.context.provider.userid, newEvent).then(
           (data) => {
             this.context.onEventCreated(data);
 

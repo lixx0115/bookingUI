@@ -1,3 +1,4 @@
+import { Event } from './event'
 export class User {
     constructor() {
 
@@ -21,6 +22,34 @@ export class User {
             friday: { open: boolean, start: number, end: number },
             saturday: { open: boolean, start: number, end: number },
             sunday: { open: boolean, start: number, end: number }
+        }
+    }
+
+    public static dayStrings: string[] = ["sunday", "monday", "tuesday", "wednsday", "thursday", "friday", "saturday", "saturday"];
+
+    public static dateToDayString(date: Date): any {
+        let dayNumber = date.getDay();
+        return User.dayStrings[dayNumber];
+
+    }
+
+    public static IsAllowed(event: Event, user: User): boolean {
+        let start = event.start;
+        let end = event.end;
+        let dayString = User.dateToDayString(start);
+        let hoursAvailable = user.provider.hoursAvailable[dayString];
+
+        if (!hoursAvailable.open) {
+            return false;
+        }
+        let startHour = start.getHours();
+        let endHour = end.getHours();
+
+        if (hoursAvailable.start <= startHour && hoursAvailable.end > endHour) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }
